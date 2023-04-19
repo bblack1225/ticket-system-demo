@@ -27,10 +27,16 @@ public class Event implements Serializable {
     private String eventName;
 
     @Column(nullable = false)
-    private LocalDateTime startTime;
+    private LocalDateTime eventStartTime;
 
     @Column(nullable = false)
-    private LocalDateTime endTime;
+    private Integer estimatedDuration;
+
+    @Column(nullable = false)
+    private LocalDateTime startSaleTime;
+
+    @Column(nullable = false)
+    private LocalDateTime endSaleTime;
 
     @Column(nullable = false)
     private Integer totalTickets;

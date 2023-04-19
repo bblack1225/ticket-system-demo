@@ -1,5 +1,7 @@
 package com.blake.ticketmasterdemo.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -13,6 +15,9 @@ public class DateUtils {
     }
 
     public static LocalDateTime dateStrToLocalDateTime(String dateStr) {
+        if(StringUtils.isBlank(dateStr)){
+            return null;
+        }
         return LocalDateTime.parse(dateStr, DATE_TIME_FORMATTER);
     }
 }

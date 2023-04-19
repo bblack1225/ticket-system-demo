@@ -6,8 +6,11 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -34,6 +37,16 @@ public class Ticket implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createDate;
+
+    @Column(nullable = false)
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updateDate;
 
     @Override
     public boolean equals(Object o) {

@@ -1,0 +1,18 @@
+server:
+  port: 8094
+  servlet:
+    context-path: /api
+    application-display-name: ticketSystem
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db?currentSchema=ticketsystem
+    driver-class-name: org.postgresql.Driver
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+logging:
+  file:
+    path: target/logs

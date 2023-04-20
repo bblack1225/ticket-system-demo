@@ -7,10 +7,9 @@ import com.blake.ticketmasterdemo.model.vo.base.BaseWebResponse;
 import com.blake.ticketmasterdemo.service.CreateEventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/event")
@@ -18,6 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventController {
 
     private final CreateEventService createEventService;
+
+    @GetMapping("/test")
+    public String test(@RequestParam(required = false) String name){
+        Objects.requireNonNull(name);
+        return "Test";
+    }
 
     @PostMapping("/create")
     public BaseWebResponse<CreateEventResponse> createEvent(

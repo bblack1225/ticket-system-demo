@@ -11,8 +11,12 @@ spring:
     password: password
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 logging:
   file:
     path: target/logs
+com:
+  blake:
+    system:
+      max-ticket-purchasable: 4

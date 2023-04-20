@@ -25,7 +25,7 @@ public class CreateArtistService extends CommonService
     public BaseWebResponse<CreateArtistResponse> execute(BaseWebRequest<CreateArtistRequest> webRequest) {
         val request = webRequest.getTransReq();
         if(artistRepository.existsByArtistName(request.getArtistName())){
-            throw new ServiceException(ResponseStatus.ARTIST_EXIST_ERROR_0001);
+            throw new ServiceException(ResponseStatus.ARTIST_EXIST_ERROR_1001);
         }
         Artist artist = new Artist();
         artist.setArtistDescription(request.getArtistDescription());

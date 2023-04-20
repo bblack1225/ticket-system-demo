@@ -32,7 +32,7 @@ public class Ticket implements Serializable {
     private String ticketNo;
 
     @Nullable
-    private Integer userId;
+    private Integer memberId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

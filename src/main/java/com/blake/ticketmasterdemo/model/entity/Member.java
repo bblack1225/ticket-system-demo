@@ -20,7 +20,7 @@ import java.util.Objects;
 public class Member implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer userId;
+        private Integer memberId;
 
         @Column(nullable = false)
         private String username;
@@ -50,7 +50,7 @@ public class Member implements Serializable {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Member member = (Member) o;
-        return getUserId() != null && Objects.equals(getUserId(), member.getUserId());
+        return getMemberId() != null && Objects.equals(getMemberId(), member.getMemberId());
     }
 
     @Override

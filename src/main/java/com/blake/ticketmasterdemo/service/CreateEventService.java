@@ -39,11 +39,11 @@ public class CreateEventService extends CommonService
     public BaseWebResponse<CreateEventResponse> execute(BaseWebRequest<CreateEventRequest> webRequest) {
         val request = webRequest.getTransReq();
         if(!artistRepository.existsById(request.getArtistId())){
-            throw new ServiceException(ResponseStatus.ARTIST_NOT_EXIST_ERROR_0002);
+            throw new ServiceException(ResponseStatus.ARTIST_NOT_EXIST_ERROR_1002);
         }
 
         if(eventRepository.existsByEventName(request.getEventName())){
-            throw new ServiceException(ResponseStatus.EVENT_NAME_EXIST_ERROR_0003);
+            throw new ServiceException(ResponseStatus.EVENT_NAME_EXIST_ERROR_2001);
         }
 
         Event event = new Event();

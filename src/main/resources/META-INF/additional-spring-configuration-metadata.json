@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "com.blake.system.max-ticket-purchasable",
+      "type": "java.lang.Integer",
+      "description": "Description for com.blake.system.max-ticket-purchasable."
+  }
+] }

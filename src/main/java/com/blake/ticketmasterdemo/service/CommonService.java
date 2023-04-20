@@ -8,6 +8,8 @@ import com.blake.ticketmasterdemo.utils.DateUtils;
 import lombok.val;
 import org.slf4j.MDC;
 
+import java.time.LocalDateTime;
+
 
 public abstract class CommonService {
     protected <T extends BaseResponse> BaseWebResponse<T> packaging(T res){
@@ -16,8 +18,12 @@ public abstract class CommonService {
                 .transId(MDC.get("transId"))
                 .statusCode(successType.getStatusCode())
                 .statusDesc(successType.getStatusDesc())
-                .transResTime(DateUtils.getCurrentTimeStr())
+                .transResTime(DateUtils.localDateTimeToStr(getCurrentTime()))
                 .build();
         return new BaseWebResponse<>(header, res);
+    }
+
+    protected LocalDateTime getCurrentTime(){
+        return LocalDateTime.now();
     }
 }

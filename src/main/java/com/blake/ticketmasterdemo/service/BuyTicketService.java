@@ -1,6 +1,7 @@
 package com.blake.ticketmasterdemo.service;
 
 import com.blake.ticketmasterdemo.config.SystemConfig;
+import com.blake.ticketmasterdemo.enums.MemberStatus;
 import com.blake.ticketmasterdemo.enums.ResponseStatus;
 import com.blake.ticketmasterdemo.enums.TicketStatus;
 import com.blake.ticketmasterdemo.exception.ServiceException;
@@ -33,8 +34,8 @@ public class BuyTicketService extends CommonService
     private final EventRepository eventRepository;
     private final TicketRepository ticketRepository;
     private final SystemConfig systemConfig;
-
     private final MemberRepository memberRepository;
+
     @Override
     public BaseWebResponse<BuyTicketResponse> execute(BaseWebRequest<BuyTicketRequest> webRequest) {
         val request = webRequest.getTransReq();
@@ -46,24 +47,15 @@ public class BuyTicketService extends CommonService
         int eventId = request.getEventId();
         int memberId = request.getMemberId();
         int buyQuantity = request.getQuantity();
+
         // check user exist
-        Member member = memberRepository
-                .findById(memberId)
-                .orElseThrow(() -> new ServiceException(ResponseStatus.USER_NOT_EXIST_ERROR_3001));
+        Member member = obtainMember(memberId);
         // check ticket is available
-        List<Ticket> availableTickets = ticketRepository
-                .findByEventIdAndStatusOrderByTicketNo(eventId, TicketStatus.AVAILABLE);
-        if(availableTickets.isEmpty()){
-            throw new ServiceException(ResponseStatus.TICKET_SOLD_OUT_ERROR_4001);
-        }
+        List<Ticket> availableTickets = obtainAvailableTickets(eventId);
         // check user can buy ticket
-        Integer userTicketCount = ticketRepository
-                .countByEventIdAndMemberId(eventId, memberId);
-        if(userTicketCount >= systemConfig.getMaxTicketPurchasable()){
-            throw new ServiceException(ResponseStatus.TICKET_MAX_PER_USER_ERROR_4002);
-        }
+        int quantityUserCanBuy = obtainMemberTicketQuantity(eventId, memberId, buyQuantity);
+
         // buy ticket
-        int quantityUserCanBuy = systemConfig.getMaxTicketPurchasable() - userTicketCount - buyQuantity;
         List<String> ticketNos = new ArrayList<>();
         for(int i = 0; i < quantityUserCanBuy; i++){
             Ticket ticket = availableTickets.get(i);
@@ -82,6 +74,34 @@ public class BuyTicketService extends CommonService
 
         // update ticket status
         return packaging(res);
+    }
+
+    private Integer obtainMemberTicketQuantity(int eventId, int memberId, int buyQuantity) {
+        val ticketMemberAlreadyBuy = ticketRepository
+                .countByEventIdAndMemberId(eventId, memberId);
+        if(ticketMemberAlreadyBuy >= systemConfig.getMaxTicketPurchasable()){
+            throw new ServiceException(ResponseStatus.TICKET_MAX_PER_USER_ERROR_4002);
+        }
+        return systemConfig.getMaxTicketPurchasable() - ticketMemberAlreadyBuy - buyQuantity;
+    }
+
+    private List<Ticket> obtainAvailableTickets(int eventId) {
+        val availableTickets = ticketRepository
+                .findByEventIdAndStatusOrderByTicketNo(eventId, TicketStatus.AVAILABLE);
+        if(availableTickets.isEmpty()){
+            throw new ServiceException(ResponseStatus.TICKET_SOLD_OUT_ERROR_4001);
+        }
+        return availableTickets;
+    }
+
+    private Member obtainMember(int memberId) {
+        val member = memberRepository
+                .findById(memberId)
+                .orElseThrow(() -> new ServiceException(ResponseStatus.USER_NOT_EXIST_ERROR_3001));
+        if(!member.getStatus().equals(MemberStatus.ACTIVE)){
+            throw new ServiceException(ResponseStatus.USER_NOT_ACTIVE_ERROR_3003);
+        }
+        return member;
     }
 
     private void checkEventAtSaleTime(Event currentEvent) {

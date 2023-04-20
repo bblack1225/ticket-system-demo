@@ -19,6 +19,7 @@ public enum ResponseStatus {
 
     USER_NOT_EXIST_ERROR_3001("3001", "User does not exist"),
     USER_EMAIL_EXIST_ERROR_3002("3002", "User email already exists"),
+    USER_NOT_ACTIVE_ERROR_3003("3003", "User is not active"),
 
     TICKET_SOLD_OUT_ERROR_4001("4001", "Ticket sold out"),
     TICKET_MAX_PER_USER_ERROR_4002("4002", "Ticket max per user");

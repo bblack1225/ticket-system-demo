@@ -4,7 +4,7 @@
     <springProperty name="FILE_PATH" scope="context" source="logging.file.path"/>
     <!-- 日期 %thread 執行緒名 %p pattern log層級 %c class包含路徑的全名 %M 方法名稱 %F 檔案名稱 %L 行數  -->
     <property name="LOG_PATTERN"
-              value="[%d{yyyy-MM-dd HH:mm:ss}] [%thread] [UUID:%X{transId}] %X{reqURI} %p %c.%M\(%F:%L\) - %m%n"/>
+              value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [UUID:%X{transId}] %X{reqURI} %p %c.%M\(%F:%L\) - %m%n"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

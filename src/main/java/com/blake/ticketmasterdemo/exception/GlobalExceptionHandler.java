@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = RuntimeException.class)
     public BaseWebResponse<BaseErrorResponse> handleRuntimeException(RuntimeException e){
-        log.info("ServiceException: {}", e.getMessage());
+        log.info("RuntimeException: ", e);
         val header = new BaseWebResHeader();
         val errorType = ResponseStatus.UNKNOWN_ERROR_0099;
         header.setTransId(MDC.get(TRANS_ID_KEY));

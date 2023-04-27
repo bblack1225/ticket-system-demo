@@ -22,7 +22,9 @@ public enum ResponseStatus {
     USER_NOT_ACTIVE_ERROR_3003("3003", "User is not active"),
 
     TICKET_SOLD_OUT_ERROR_4001("4001", "Ticket sold out"),
-    TICKET_MAX_PER_USER_ERROR_4002("4002", "Ticket max per user");
+    TICKET_MAX_PER_USER_ERROR_4002("4002", "Member ticket purchase limit reached"),
+    TICKET_PURCHASE_FAILED_ERROR_4003("4003", "Ticket purchase failed"),
+    TICKET_INSUFFICIENT_REMAINING_TICKETS_ERROR_4004("4004", "Insufficient remaining tickets");
 
     private final String statusCode;
     private final String statusDesc;

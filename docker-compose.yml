@@ -15,6 +15,7 @@ services:
       - ticket-system-network
   app:
     build: .
+    container_name: app1
     image: app
     ports:
       - "8094:8094"
@@ -24,7 +25,53 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/db?currentSchema=ticketsystem
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
+      APP_ID: APP1
     restart: always
+    networks:
+      - ticket-system-network
+  app2:
+    build: .
+    container_name: app2
+    image: app
+    ports:
+      - "8095:8094"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/db?currentSchema=ticketsystem
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      APP_ID: APP2
+    restart: always
+    networks:
+      - ticket-system-network
+  app3:
+    build: .
+    container_name: app3
+    image: app
+    ports:
+      - "8096:8094"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/db?currentSchema=ticketsystem
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      APP_ID: APP3
+    restart: always
+    networks:
+      - ticket-system-network
+  nginx:
+    image: nginx:1.19.6
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+      - app2
+      - app3
     networks:
       - ticket-system-network
 volumes:

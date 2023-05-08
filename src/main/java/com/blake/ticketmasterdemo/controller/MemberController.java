@@ -2,19 +2,22 @@ package com.blake.ticketmasterdemo.controller;
 
 
 import com.blake.ticketmasterdemo.enums.MemberStatus;
+import com.blake.ticketmasterdemo.enums.ResponseStatus;
+import com.blake.ticketmasterdemo.exception.ServiceException;
 import com.blake.ticketmasterdemo.model.entity.Member;
 import com.blake.ticketmasterdemo.model.vo.base.BaseWebRequest;
 import com.blake.ticketmasterdemo.model.vo.base.BaseWebResponse;
 import com.blake.ticketmasterdemo.model.vo.member.CreateMemberRequest;
 import com.blake.ticketmasterdemo.model.vo.member.CreateMemberResponse;
+import com.blake.ticketmasterdemo.model.vo.member.UpdateMemberRequest;
 import com.blake.ticketmasterdemo.repository.MemberRepository;
 import com.blake.ticketmasterdemo.service.CreateMemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final CreateMemberService createMemberService;
@@ -52,4 +56,36 @@ public class MemberController {
         memberRepository.saveAll(memberList);
         return "Success";
     }
-}
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @PostMapping("/update")
+    public String update(@RequestBody UpdateMemberRequest request){
+        Member member = memberRepository.findById(request.getMemberId())
+                .orElseThrow(() -> new ServiceException(ResponseStatus.UNKNOWN_ERROR_0099));
+        member.setStatus(request.getStatus());
+        memberRepository.save(member);
+        return "Success";
+    }
+
+    @Transactional
+    @GetMapping("/getMember")
+    public String getMember(@RequestParam int userId){
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new ServiceException(ResponseStatus.UNKNOWN_ERROR_0099));
+        log.info("Member status: {}", member.getStatus());
+
+        // 模擬在第二次讀取之前，數據庫中的資料發生了變化
+        try {
+            Thread.sleep(5000); // 延遲 5 秒
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        Member member2 =  memberRepository.findById(userId)
+                .orElseThrow(() -> new ServiceException(ResponseStatus.UNKNOWN_ERROR_0099));
+        log.info("Member2 status: {}", member2.getStatus());
+        return "Success";
+        }
+
+    }

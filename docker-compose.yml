@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:13
+    container_name: ticket-system-db
+    ports:
+      - "5433:5432"
+    volumes:
+      - backend_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    networks:
+      - ticket-system-network
+  app:
+    build: .
+    image: app
+    ports:
+      - "8094:8094"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/db?currentSchema=ticketsystem
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    restart: always
+    networks:
+      - ticket-system-network
+volumes:
+  backend_db_data:
+    external: true
+networks:
+    ticket-system-network:
+        driver: bridge

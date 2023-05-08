@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.blake</groupId>
-    <artifactId>ticket-master-demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>ticket-system</artifactId>
+    <version>0.1</version>
     <name>ticket-master-demo</name>
     <description>ticket-master-demo</description>
     <properties>
@@ -67,6 +67,7 @@
     </dependencies>
 
     <build>
+        <finalName>ticketsystem</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
